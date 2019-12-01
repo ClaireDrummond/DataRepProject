@@ -67,6 +67,7 @@ def update(Barcode):
 
     return "in update for Barcode "+str(Barcode)
 
+# curl -X DELETE "http://127.0.0.1:5000/Clothes/1001"
 @app.route('/Clothes/<int:Barcode>' , methods=['DELETE'])
 def delete(Barcode):
     foundClothes = list(filter(lambda t: t['Barcode']== Barcode, Clothes))
