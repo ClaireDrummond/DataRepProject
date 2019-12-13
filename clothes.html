@@ -1,17 +1,18 @@
 <html>
     <head>
-        <title> view Clothes</title>
+        <title> view Shop</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
        
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
+
     <body>
         <h1>Clothes</h1>
         <div> <button id="showCreateButton" onclick="showCreate()">Create</button></div>
         <div>
             <table class="table" id="clothesTable">
                 <tr>
-                        <th>Barcode</th>
+                        <th>id</th>
                         <th>Item</th>
                         <th>
                             Designer
@@ -25,7 +26,7 @@
         </div>
         <div id='createUpdateForm' style="display: none">
                 <h2><span id="createLabel">Create a</span> <span id="updateLabel">update</span> Clothes</h2>
-                <input type="hidden" name="Barcode"/>
+                <input type="hidden" name="id"/>
                 Item <input type="text" name="Item" /><br/>
                 Designer <input type="text" name="Designer"/> <br/>
                 Price <input type="number" name="Price"/> <br/>
@@ -70,7 +71,7 @@
         item.Designer = form.querySelector('input[name="Designer"]').value
         item.Price = form.querySelector('input[name="Price"]').value
         console.log(JSON.stringify(item))
-        createBookAjax(item)
+        createItemAjax(item)
         
         
     }
@@ -87,15 +88,15 @@
         var tableElement = document.getElementById('clothesTable');
         var rowElement = r.parentNode.parentNode;
         var index = rowElement.rowIndex;
-        deleteItemAjax(rowElement.getAttribute("Barcode"));
+        deleteItemAjax(rowElement.getAttribute("id"));
         tableElement.deleteRow(index);
     }
     function addItemToTable(item){
         var tableElement = document.getElementById('clothesTable')
         var rowElement = tableElement.insertRow(-1)
-        rowElement.setAttribute('Barcode',item.Barcode)
+        rowElement.setAttribute('id',item.id)
         var cell1 = rowElement.insertCell(0);
-        cell1.innerHTML = item.Barcode
+        cell1.innerHTML = item.id
         var cell2 = rowElement.insertCell(1);
         cell2.innerHTML = item.Item
         var cell3 = rowElement.insertCell(2);
@@ -115,22 +116,22 @@
     }
     function getItemFromRow(rowElement){
         var car ={}
-        item.Barcode  = rowElement.getAttribute('id')
+        item.id  = rowElement.getAttribute('id')
         item.Item = rowElement.cells[1].firstChild.textContent
         item.Designer = rowElement.cells[2].firstChild.textContent
         item.Price = parseInt(rowElement.cells[3].firstChild.textContent,10)
         return item
     }
     function setItemInRow(rowElement, item){
-        rowElement.cells[0].firstChild.textContent= item.Barcode 
+        rowElement.cells[0].firstChild.textContent= item.id 
         rowElement.cells[1].firstChild.textContent= item.Item
         rowElement.cells[2].firstChild.textContent= item.Designer
         rowElement.cells[3].firstChild.textContent= item.Price
     }
-    function populateFormWithBook(item){
+    function populateFormWithItem(item){
         var form = document.getElementById('createUpdateForm')
-        form.querySelector('input[name="Barcode"]').disabled = true
-        form.querySelector('input[name="Barcode"]').value  = item.Barcode
+        form.querySelector('input[name="id"]').disabled = true
+        form.querySelector('input[name="id"]').value  = item.id
         form.querySelector('input[name="Item"]').value= item.Item
         form.querySelector('input[name="Designer"]').value= item.Designer
         form.querySelector('input[name="Price"]').value= item.Price
@@ -139,7 +140,7 @@
     function getItemFromForm(){
         var form = document.getElementById('createUpdateForm')
         var item = {}
-        item.Barcode = form.querySelector('input[name="Barcode"]').value
+        item.id = form.querySelector('input[name="id"]').value
         item.Item = form.querySelector('input[name="Item"]').value
         item.Designer = form.querySelector('input[name="Designer"]').value
         item.Price = parseInt(form.querySelector('input[name="Price"]').value,10)
@@ -154,7 +155,7 @@
             "dataType": "JSON",
             "success":function(result){
                 //console.log(result);
-                for (book of result){
+                for (item of result){
                     addItemToTable(item);
                 }
                 
@@ -175,7 +176,7 @@
             contentType: "application/json; charset=utf-8",
             "success":function(result){
                 //console.log(result);
-                item.Barcode = result.Barcode
+                item.id = result.id
                 addItemToTable(item)
                 clearForm()
                 showViewAll()
@@ -189,7 +190,7 @@
        
         console.log(JSON.stringify(item));
         $.ajax({
-            "url": "http://127.0.0.1:5000/clothes/"+encodeURI(item.barcode),
+            "url": "http://127.0.0.1:5000/clothes/"+encodeURI(item.id),
             "method":"PUT",
             "data":JSON.stringify(item),
             "dataType": "JSON",
@@ -203,11 +204,11 @@
             }
         });
     }
-    function deleteItemAjax(Barcode){
+    function deleteItemAjax(id){
         
         //console.log(JSON.stringify('deleting '+id));
         $.ajax({
-            "url": "http://127.0.0.1:5000/clothes/"+encodeURI(Barcode),
+            "url": "http://127.0.0.1:5000/clothes/"+encodeURI(id),
             "method":"DELETE",
             "data":"",
             "dataType": "JSON",

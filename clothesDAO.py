@@ -1,14 +1,13 @@
 import mysql.connector
+import dbconfig as cfg
 class ClothesDAO:
     db=""
     def __init__(self): 
         self.db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        #user="datarep",  # this is the user name on my mac
-        #passwd="password" # for my mac
-        database="datarepresentation"
+        host= cfg.mysql['host'],
+        user= cfg.mysql['user'],
+        password= cfg.mysql['password'],
+        database= cfg.mysql['database']
         )
     def create(self, values):
         cursor = self.db.cursor()
@@ -29,12 +28,12 @@ class ClothesDAO:
             print(result)
             returnArray.append(self.convertToDictionary(result))
 
-        return resultArray
+        return returnArray
 
-    def findByBarcode(self, barcode):
-        cursor = self.db.cursor()
-        sql="select * clothes where barcode = %s"
-        values = (barcode,)
+    def findById(self, id):
+        cursor = self.db.cursor() 
+        sql="select * from clothes where id = %s"
+        values = (id,)
 
         cursor.execute(sql, values)
         result = cursor.fetchone()
@@ -42,14 +41,14 @@ class ClothesDAO:
 
     def update(self, values):
         cursor = self.db.cursor()
-        sql="update clothes set items= %s, designer=%s, price=%s  where barcode = %s"
+        sql="update clothes set items= %s, designer=%s, price=%s  where id = %s"
         cursor.execute(sql, values)
         self.db.commit()
 
-    def delete(self, barcode):
+    def delete(self, id):
         cursor = self.db.cursor()
-        sql="delete from clothes where barcode = %s"
-        values = (barcode,)
+        sql="delete from clothes where id = %s"
+        values = (id,)
 
         cursor.execute(sql, values)
 
@@ -57,15 +56,15 @@ class ClothesDAO:
         print("delete done")
 
     def convertToDictionary(self, result):
-        colnames=['barcode','Item','Designer', "Price"]
+        colnames=['id','Item','Designer', "Price"]
         
-        item = {}
+        convert = {}
 
         if result:
             for i, colName in enumerate(colnames):
                 value = result[i]
-                item[colName] = value
-        return(item)
+                convert[colName] = value
+        return(convert)
 
 clothesDAO = ClothesDAO()
 

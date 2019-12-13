@@ -16,11 +16,11 @@ def getAll():
     return jsonify(results)
 
 #curl "http://127.0.0.1:5000/clothes/2"
-@app.route('/clothes/<int:barcode>')
-def findByBarcode(barcode):
-    foundClothe = clothesDAO.findByBarcode(barcode)
+@app.route('/clothes/<int:id>')
+def findById(id):
+    foundItem = clothesDAO.findById(id)
     
-    return jsonify(foundClothe)
+    return jsonify(foundItem)
 
 #curl  -i -H "Content-Type:application/json" -X POST -d "{\"Item\":\"Jeans\",\"Designer\":\"Warehouse\",\"Price\":123}" http://127.0.0.1:5000/clothes
 @app.route('/clothes', methods=['POST'])
@@ -29,21 +29,21 @@ def create():
     if not request.json:
         abort(400)
     # other checking 
-    Clothe = {
+    item = {
         "Item": request.json['Item'],
         "Designer": request.json['Designer'],
         "Price": request.json['Price'],
     }
-    values = (clothe['Item'], clothe['Designer'], clothe['Price'])
-    newBarcode = clothesDAO.create(values)
-    clothe['barcode'] = newBarcode
-    return jsonify(clothe)
+    values = (item['Item'], item['Designer'], item['Price'])
+    newId = clothesDAO.create(values)
+    item['id'] = newId
+    return jsonify(item)
 
 #curl  -i -H "Content-Type:application/json" -X PUT -d "{\"Item\":\"Jeans\",\"Designer\":\"Warehouse\",\"Price\":2000}" http://127.0.0.1:5000/clothes/1
-@app.route('/clothes/<int:Barcode>', methods=['PUT'])
-def update(Barcode):
-    foundClothe = clothesDAO.findByBarcode(barcode)
-    if foundClothe:
+@app.route('/clothes/<int:id>', methods=['PUT'])
+def update(id):
+    foundItem = clothesDAO.findById(id)
+    if foundItem:
         abort(404)
   
     if not request.json:
@@ -53,23 +53,23 @@ def update(Barcode):
         abort(400)
 
     if 'Item' in reqJson:
-        foundClothe['Item'] = reqJson['Item']
+        foundItem['Item'] = reqJson['Item']
     if 'Designer' in reqJson:
-        foundClothe['Designer'] = reqJson['Designer']
+        foundItem['Designer'] = reqJson['Designer']
     if 'Price' in reqJson:
-        foundClothe['Price'] = reqJson['Price']
+        foundItem['Price'] = reqJson['Price']
     
     
-    values = (foundClothe['Item'],foundClothe['Designer'],foundClothe['Price'],foundClothe['barcode'])
+    values = (foundItem['Item'],foundItem['Designer'],foundItem['Price'],founditem['id'])
     clothesDAO.update(values)    
     
-    return jsonify(foundClothe)
+    return jsonify(foundItem)
    
 
-# curl -X DELETE "http://127.0.0.1:5000/clothes/1"
-@app.route('/clothes/<int:Barcode>' , methods=['DELETE'])
-def delete(Barcode):
-    clothesDAO.delete(barcode)
+# curl -X DELETE "http://127.0.0.1:5000/clothes"
+@app.route('/clothes/<int:id>' , methods=['DELETE'])
+def delete(id):
+    clothesDAO.delete(id)
     return jsonify({"done":True})
 
 
