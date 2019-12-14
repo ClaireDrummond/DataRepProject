@@ -43,7 +43,7 @@ def create():
 @app.route('/clothes/<int:id>', methods=['PUT'])
 def update(id):
     foundItem = clothesDAO.findById(id)
-    if foundItem:
+    if not foundItem:
         abort(404)
   
     if not request.json:
@@ -60,7 +60,7 @@ def update(id):
         foundItem['Price'] = reqJson['Price']
     
     
-    values = (foundItem['Item'],foundItem['Designer'],foundItem['Price'],founditem['id'])
+    values = (foundItem['Item'],foundItem['Designer'],foundItem['Price'],foundItem['id'])
     clothesDAO.update(values)    
     
     return jsonify(foundItem)

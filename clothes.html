@@ -1,13 +1,81 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <title> view Shop</title>
+        <meta charset="utf-8"/>
+        <title> Clothes Shop Price List</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, intial-scale=1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
        
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, intial-scale=1">
+    
     </head>
 
+    <style>
+        /* Set the font family */
+    body{
+        font-family: Arial, Helvetica, sans-serif;
+        margin:0;
+        }
+    .header{
+        /*Define the styling for the header class*/
+        padding: 50px;
+        text-align: center;
+        background:#ba33cc;
+        color: white;
+        }
+   
+    .navigation{
+        /*hide over flow, and pick colour*/
+        overflow: hidden;
+        background-color:peru;
+        }
+    .navigation a{
+        /*style the links in the navigation bar*/
+        float:left;
+        display:block;
+        padding: 20px 40px;
+        color: white;
+        }    
+   
+    /*define the default styling for the buttons*/
+    .button {
+        background-color: #33cc3b;
+        border: none;
+        color: white;
+        width:150px;
+        height:60px;
+        margin:2px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        align-self: center;
+        }
+    /*define the default styling for the button on hover*/
+    .button:hover{
+        color: #3333cc;  
+        background-color: white;
+        }         
+</style>
     <body>
-        <h1>Clothes</h1>
+
+    <div class="header">
+        <h1>Drummond's Clothes Shop</h1>
+    </div>
+
+
+        <div class="navigation">
+                <a href="clothes.html">Price List</a>
+                <a href="contact.html">Contact Us</a>
+         </div>    
+
+
+
+
+        <div  style="padding:40px">
+        <h1 style="color:green">Clothes Price List</h1>
         <div> <button id="showCreateButton" onclick="showCreate()">Create</button></div>
         <div>
             <table class="table" id="clothesTable">
@@ -25,13 +93,16 @@
             </table>
         </div>
         <div id='createUpdateForm' style="display: none">
-                <h2><span id="createLabel">Create a</span> <span id="updateLabel">update</span> Clothes</h2>
+                <h2><span style="color:#cc3391"id="createLabel">Create a new Item:</span> <span id="updateLabel">update</span> Clothes</h2>
                 <input type="hidden" name="id"/>
                 Item <input type="text" name="Item" /><br/>
+                <br/> 
                 Designer <input type="text" name="Designer"/> <br/>
+                <br/> 
                 Price <input type="number" name="Price"/> <br/>
-                <span><button id="doCreateButton" onclick="doCreate()">Create</button></span>
-                <span><button id="doUpdateButton" onclick="doUpdate()">Update</button></span>
+                <br/> 
+                <span><button style="background-color: #cc33b2;border: none;color: white; width:120px; height:50px;margin:2px"id="doCreateButton" onclick="doCreate()">Create</button></span>
+                <span><button style="background-color: #cc33b2;border: none;color: white; width:120px; height:50px;margin:2px"id="doUpdateButton" onclick="doUpdate()">Update</button></span>
         </div>
     </body>
     <script>
@@ -115,7 +186,7 @@
         form.querySelector('input[name="Price"]').value=''
     }
     function getItemFromRow(rowElement){
-        var car ={}
+        var item ={}
         item.id  = rowElement.getAttribute('id')
         item.Item = rowElement.cells[1].firstChild.textContent
         item.Designer = rowElement.cells[2].firstChild.textContent

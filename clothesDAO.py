@@ -41,7 +41,7 @@ class ClothesDAO:
 
     def update(self, values):
         cursor = self.db.cursor()
-        sql="update clothes set items= %s, designer=%s, price=%s  where id = %s"
+        sql="update clothes set item= %s, designer=%s, price=%s  where id = %s"
         cursor.execute(sql, values)
         self.db.commit()
 
@@ -64,7 +64,7 @@ class ClothesDAO:
             for i, colName in enumerate(colnames):
                 value = result[i]
                 convert[colName] = value
-        return(convert)
+        return convert
 
 clothesDAO = ClothesDAO()
 
